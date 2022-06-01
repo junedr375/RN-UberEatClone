@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import About from "../components/resturantDetail/About";
 import { Divider } from "react-native-elements";
 import MenuItems, { localFood } from "../components/resturantDetail/MenuItems";
+import ViewCart from "../components/resturantDetail/ViewCart";
 
-export default function ResturantDetails() {
+export default function ResturantDetails({ route, navigation }) {
   const [menuData, setMenuData] = useState(localFood);
 
   const getResturantMenu = async () => {
@@ -21,12 +22,16 @@ export default function ResturantDetails() {
   };
   useEffect(() => {
     getResturantMenu();
-  }, [menuData]);
+  }, []);
   return (
     <View style={{ flex: 1 }}>
-      <About></About>
+      <About route={route}></About>
       <Divider width={1.8} style={{ marginVertical: 20 }}></Divider>
-      <MenuItems foods={menuData}></MenuItems>
+      <MenuItems foods={menuData} resturantName={route.params.name}></MenuItems>
+      <ViewCart
+        navigation={navigation}
+        resturantName={route.params.name}
+      ></ViewCart>
     </View>
   );
 }

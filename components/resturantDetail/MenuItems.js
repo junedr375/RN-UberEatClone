@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import React from "react";
 import { Divider } from "react-native-elements";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useDispatch, useSelector } from "react-redux";
 
 export const localFood = [
   {
@@ -17,65 +19,6 @@ export const localFood = [
   },
 ];
 
-// const foods = [
-//   {
-//     title: "Tandoori Chicken",
-//     description: "Tandoori Chicken with rice, salad, and naan bread",
-//     price: "$12.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-//   {
-//     title: "Chicken Tikka",
-//     description: "Chicken Tikka with rice, salad, and naan bread",
-//     price: "$22.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-//   {
-//     title: "Tandoori Chicken",
-//     description: "Tandoori Chicken with rice, salad, and naan bread",
-//     price: "$452.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-//   {
-//     title: "Chicken Tikka",
-//     description: "Chicken Tikka with rice, salad, and naan bread",
-//     price: "$89.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-//   {
-//     title: "Tandoori Chicken",
-//     description: "Tandoori Chicken with rice, salad, and naan bread",
-//     price: "$42.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-//   {
-//     title: "Chicken Tikka",
-//     description: "Chicken Tikka with rice, salad, and naan bread",
-//     price: "$32.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-//   {
-//     title: "Tandoori Chicken",
-//     description: "Tandoori Chicken with rice, salad, and naan bread",
-//     price: "$99.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-//   {
-//     title: "Chicken Tikka",
-//     description: "Chicken Tikka with rice, salad, and naan bread",
-//     price: "$71.99",
-//     image:
-//       "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg",
-//   },
-// ];
-
 const styles = StyleSheet.create({
   menuItemStyle: {
     flexDirection: "row",
@@ -89,15 +32,42 @@ const styles = StyleSheet.create({
 });
 
 export default function MenuItems(props) {
+  const dispatch = useDispatch();
+  const selectItem = (item, checkBoxValue) =>
+    dispatch({
+      type: "ADD_TO_CART",
+      payload: {
+        ...item,
+        resturantName: props.resturantName,
+        checkBoxValue: checkBoxValue,
+      },
+    });
+
+  const cartItems = useSelector(
+    (state) => state.cartReducer.selectedItems.items
+  );
+  const isFoodInCart = (food, cartItems) =>
+    Boolean(cartItems.find((item) => item.menuname === food.menuname));
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={{ height: "100%" }}>
       {props.foods.map((food, index) => (
         <View key={index}>
           <View style={styles.menuItemStyle}>
+            <BouncyCheckbox
+              iconStyle={{ borderColor: "lightgray", borderRadius: 0 }}
+              fillColor="green"
+              isChecked={isFoodInCart(food, cartItems)}
+              onPress={(checkBoxValue) => selectItem(food, checkBoxValue)}
+            ></BouncyCheckbox>
             <FoodInfo food={food}></FoodInfo>
             <FoodImage food={food}></FoodImage>
           </View>
-          <Divider width={0.5} orientation="vertical"></Divider>
+          <Divider
+            width={0.5}
+            orientation="vertical"
+            style={{ marginHorizontal: 20 }}
+          ></Divider>
         </View>
       ))}
     </ScrollView>

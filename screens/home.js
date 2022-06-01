@@ -11,7 +11,7 @@ import { Divider } from "react-native-elements";
 
 const YELP_API_KEY = "";
 
-export default function Home() {
+export default function Home({ navigation }) {
   const [resturantData, setresturantData] = useState(loacalResturant);
   const [city, setCity] = useState("Hollywood");
   const [activeTab, setactiveTab] = useState("Delivery");
@@ -45,7 +45,10 @@ export default function Home() {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Categories></Categories>
-        <ResturantItems resturantData={resturantData}></ResturantItems>
+        <ResturantItems
+          resturantData={resturantData}
+          navigation={navigation}
+        ></ResturantItems>
       </ScrollView>
       <Divider width={1}></Divider>
       <BotomTabs></BotomTabs>

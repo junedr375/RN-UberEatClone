@@ -1,18 +1,22 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
 
-const image =
-  "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg";
+// const image =
+//   "https://res.cloudinary.com/jobizil/image/upload/v1602289542/images/restaurant/rhpnydmmfj8kejlzecq6.jpg";
 
-const title = "Farmhouse Pizza Thai Delivery";
-const description = "Thai · Comfort Food ·  $$ · 🎟️ · 4 ⭐ (2931+)";
+// const title = "Farmhouse Pizza Thai Delivery";
+// const description = "Thai · Comfort Food ·  $$ · 🎟️ · 4 ⭐ (2931+)";
 
-export default function About() {
+export default function About(props)
+{
+  const { name, rating, description, image, price } = props.route.params;
+  const formatedDescription = `${description.substring(0, 50)}  ·  $${price}  ·  🎟️  ·  ${rating} ⭐` ;
+
   return (
     <View>
       <ResturantImage image={image}></ResturantImage>
-      <ResturantTitle title={title}></ResturantTitle>
-      <ResturantDescription description={description}></ResturantDescription>
+      <ResturantTitle title={name}></ResturantTitle>
+      <ResturantDescription description={formatedDescription}></ResturantDescription>
     </View>
   );
 }

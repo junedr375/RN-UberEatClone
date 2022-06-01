@@ -25,23 +25,36 @@ export const loacalResturant = [
   },
 ];
 
-export default function ResturantItems(props) {
+export default function ResturantItems({ navigation, ...props }) {
   return props.resturantData.length != 0 ? (
-    <TouchableOpacity activeOpacity={1}>
+    <View>
       {props.resturantData.map((resturant, index) => (
-        <View
+        <TouchableOpacity
           key={index}
-          style={{ marginTop: 10, padding: 15, backgroundColor: "white" }}
+          activeOpacity={1}
+          onPress={() => {
+            navigation.navigate("ResturantDetail", {
+              name: resturant.businessname,
+              rating: resturant.reviews,
+              description: resturant.address,
+              image: resturant.image,
+              price: resturant.averagecost,
+            });
+          }}
         >
-          <ResturantImage image={resturant.image} />
-          <ResturantInfo
-            name={resturant.businessname}
-            rating={resturant.reviews}
-            decription={resturant.address}
-          />
-        </View>
+          <View
+            style={{ marginTop: 10, padding: 15, backgroundColor: "white" }}
+          >
+            <ResturantImage image={resturant.image} />
+            <ResturantInfo
+              name={resturant.businessname}
+              rating={resturant.reviews}
+              decription={resturant.address}
+            />
+          </View>
+        </TouchableOpacity>
       ))}
-    </TouchableOpacity>
+    </View>
   ) : (
     <View style={{ paddingTop: "20%" }}>
       <Text
