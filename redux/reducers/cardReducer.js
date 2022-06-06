@@ -22,7 +22,7 @@ let cartReducer = (state = defaultState, action) => {
           resturantName: action.payload.resturantName,
         };
       }
-      console.log(newState, "˃˃˃˃˃˃");
+      console.log(newState.selectedItems.items.length);
       return newState;
 
     default:

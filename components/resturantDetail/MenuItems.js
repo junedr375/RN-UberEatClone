@@ -31,14 +31,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function MenuItems(props) {
+export default function MenuItems({
+  resturantName,
+  foods,
+  hideCheckBox,
+  marginLeft,
+}) {
   const dispatch = useDispatch();
   const selectItem = (item, checkBoxValue) =>
     dispatch({
       type: "ADD_TO_CART",
       payload: {
         ...item,
-        resturantName: props.resturantName,
+        resturantName: resturantName,
         checkBoxValue: checkBoxValue,
       },
     });
@@ -51,17 +56,24 @@ export default function MenuItems(props) {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={{ height: "100%" }}>
-      {props.foods.map((food, index) => (
+      {foods.map((food, index) => (
         <View key={index}>
           <View style={styles.menuItemStyle}>
-            <BouncyCheckbox
-              iconStyle={{ borderColor: "lightgray", borderRadius: 0 }}
-              fillColor="green"
-              isChecked={isFoodInCart(food, cartItems)}
-              onPress={(checkBoxValue) => selectItem(food, checkBoxValue)}
-            ></BouncyCheckbox>
+            {hideCheckBox ? (
+              <></>
+            ) : (
+              <BouncyCheckbox
+                iconStyle={{ borderColor: "lightgray", borderRadius: 0 }}
+                fillColor="green"
+                isChecked={isFoodInCart(food, cartItems)}
+                onPress={(checkBoxValue) => selectItem(food, checkBoxValue)}
+              ></BouncyCheckbox>
+            )}
             <FoodInfo food={food}></FoodInfo>
-            <FoodImage food={food}></FoodImage>
+            <FoodImage
+              food={food}
+              marginLeft={marginLeft ? marginLeft : 0}
+            ></FoodImage>
           </View>
           <Divider
             width={0.5}
@@ -81,11 +93,16 @@ const FoodInfo = (props) => (
   </View>
 );
 
-const FoodImage = (props) => (
+const FoodImage = ({ marginLeft, ...props }) => (
   <View>
     <Image
       source={{ uri: props.food.images[0] }}
-      style={{ width: 100, height: 100, borderRadius: 8 }}
+      style={{
+        width: 100,
+        height: 100,
+        borderRadius: 8,
+        marginLeft: marginLeft,
+      }}
     ></Image>
   </View>
 );
