@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import OrderItem from "./OrderItem";
 import { ScrollView } from "react-native-gesture-handler";
+import LottieView from "lottie-react-native";
 //import firebase from "../../firebase";
 
 export default function ViewCart({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { items, resturantName } = useSelector(
     (state) => state.cartReducer.selectedItems
@@ -14,6 +16,7 @@ export default function ViewCart({ navigation }) {
   const total = items.length;
 
   const addOrderToFirebase = async () => {
+    setLoading(true);
     // const db = firebase.default.firestore();
 
     // db.collection("orders")
@@ -29,7 +32,12 @@ export default function ViewCart({ navigation }) {
     //     console.log(error);
     //   });
     setModalVisible(false);
-    navigation.navigate("OrderCompleted");
+
+    setTimeout(() => {
+      setLoading(false);
+      navigation.navigate("OrderCompleted");
+    }),
+      2500;
   };
 
   const styles = StyleSheet.create({
@@ -175,6 +183,28 @@ export default function ViewCart({ navigation }) {
               </Text>
             </TouchableOpacity>
           </View>
+        </View>
+      ) : (
+        <></>
+      )}
+      {loading ? (
+        <View
+          style={{
+            backgroundColor: "black",
+            position: "absolute",
+            opacity: 0.6,
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+          }}
+        >
+          <LottieView
+            style={{ height: 200 }}
+            source={require("../../assets/animations/scanner.json")}
+            autoPlay
+            speed={3}
+          ></LottieView>
         </View>
       ) : (
         <></>
